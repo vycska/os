@@ -54,15 +54,17 @@ void Task_DS18B20(void) {
 				t=DS18B20_GetTemperature(data);
 				task_ds18b20_data.t[i]=t*10; //atkreipk demesi cia (log recordas ir kiek devicu prijungta) !!!
 				if(i==task_ds18b20_data.selected) {
+					/*
 					l=mysprintf(s,"%d: ",i);
 					for(j=0;j<9;j++)
 						l+=mysprintf(&s[l],"0x%x%s",(unsigned int)data[j],j==8?".":" ");
 					Fifo_Uart0_Put(s,&smphrFinished);
 					OS_Blocking_Wait(&smphrFinished);
+					*/
 					mysprintf(s,"T%d: %f1C",i,(char*)&t);
 					Fifo_HD44780_Put(s,3,10);
-					Fifo_Uart0_Put(s,&smphrFinished);
-					OS_Blocking_Wait(&smphrFinished);
+					//Fifo_Uart0_Put(s,&smphrFinished);
+					//OS_Blocking_Wait(&smphrFinished);
 				}
 			}
 			else task_ds18b20_data.t[i]=-100;
