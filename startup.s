@@ -2,6 +2,10 @@
 .cpu cortex-m3
 .thumb
 
+.global Reset_Handler
+
+.weak NMI_Handler,HardFault_Handler,MemManage_Handler,BusFault_Handler,UsageFault_Handler,SVC_Handler,DebugMon_Handler,PendSV_Handler,SysTick_Handler,WDT_IRQHandler,TIMER0_IRQHandler,TIMER1_IRQHandler,TIMER2_IRQHandler,TIMER3_IRQHandler,UART0_IRQHandler,UART1_IRQHandler,UART2_IRQHandler,UART3_IRQHandler,PWM1_IRQHandler,I2C0_IRQHandler,I2C1_IRQHandler,I2C2_IRQHandler,SPI_IRQHandler,SSP0_IRQHandler,SSP1_IRQHandler,PLL0_IRQHandler,RTC_IRQHandler,EINT0_IRQHandler,EINT1_IRQHandler,EINT2_IRQHandler,EINT3_IRQHandler,ADC_IRQHandler,BOD_IRQHandler,USB_IRQHandler,CAN_IRQHandler,DMA_IRQHandler,I2S_IRQHandler,ENET_IRQHandler,RIT_IRQHandler,MCPWM_IRQHandler,QEI_IRQHandler,PLL1_IRQHandler,USBActivity_IRQHandler,CANActivity_IRQHandler
+
 .section .intvecs, "ax"
 .word _stack_end
 .word Reset_Handler
@@ -153,9 +157,5 @@ USBActivity_IRQHandler:
 .thumb_func
 CANActivity_IRQHandler:
 b .
-
-.global Reset_Handler
-
-.weak NMI_Handler,HardFault_Handler,MemManage_Handler,BusFault_Handler,UsageFault_Handler,SVC_Handler,DebugMon_Handler,PendSV_Handler,SysTick_Handler,WDT_IRQHandler,TIMER0_IRQHandler,TIMER1_IRQHandler,TIMER2_IRQHandler,TIMER3_IRQHandler,UART0_IRQHandler,UART1_IRQHandler,UART2_IRQHandler,UART3_IRQHandler,PWM1_IRQHandler,I2C0_IRQHandler,I2C1_IRQHandler,I2C2_IRQHandler,SPI_IRQHandler,SSP0_IRQHandler,SSP1_IRQHandler,PLL0_IRQHandler,RTC_IRQHandler,EINT0_IRQHandler,EINT1_IRQHandler,EINT2_IRQHandler,EINT3_IRQHandler,ADC_IRQHandler,BOD_IRQHandler,USB_IRQHandler,CAN_IRQHandler,DMA_IRQHandler,I2S_IRQHandler,ENET_IRQHandler,RIT_IRQHandler,MCPWM_IRQHandler,QEI_IRQHandler,PLL1_IRQHandler,USBActivity_IRQHandler,CANActivity_IRQHandler
 
 .end
