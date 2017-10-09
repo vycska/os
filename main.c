@@ -32,6 +32,31 @@ long long int millis;
 
 int main(void) {
 	int i;
+
+	DisableInterrupts();
+	PCONP=0; //gate off clock for peripherals
+	PLL0_Init();
+	PCLKSEL0=0; //select clock for peripherals to be CCLK/4
+	PCLKSEL1=0;
+	
+	FLASHCFG = (FLASHCFG&(~(0xf<<12))) | (5<<12); //flash accesses use 6 cpu clocks ["safe" setting]
+	
+	UART0_Init(115200,8,1,0);
+	Board_LED_Init();
+	I2C0_Init();
+	I2C1_Init();
+	
+	Timer0_Init();
+	Timer1_Init();
+	Timer2_Init();
+	Timer3_Init();
+	
+	RTC_Init();
+	
+	Active_Buzzer_Init();
+	Passive_Buzzer_Init();
+	
+	//interrupts will be enabled in OS_Start()
 	Fifo_HD44780_Init();
 	Fifo_Uart0_Init();
 	Fifo_Command_Parser_Init();
@@ -67,31 +92,4 @@ void init(void) {
 	for(src=&_data_start_lma,dst=&_data_start;dst<&_data_end;src++,dst++) *dst=*src;
 	//zero bss
 	for(dst=&_bss_start;dst<&_bss_end;dst++) *dst=0;
-}
-
-void SystemInit(void) {
-	DisableInterrupts();
-	PCONP=0; //gate off clock for peripherals
-	PLL0_Init();
-	PCLKSEL0=0; //select clock for peripherals to be CCLK/4
-	PCLKSEL1=0;
-	
-	FLASHCFG = (FLASHCFG&(~(0xf<<12))) | (5<<12); //flash accesses use 6 cpu clocks ["safe" setting]
-	
-	UART0_Init(115200,8,1,0);
-	Board_LED_Init();
-	I2C0_Init();
-	I2C1_Init();
-	
-	Timer0_Init();
-	Timer1_Init();
-	Timer2_Init();
-	Timer3_Init();
-	
-	RTC_Init();
-	
-	Active_Buzzer_Init();
-	Passive_Buzzer_Init();
-	
-	//interrupts will be enabled in OS_Start()
 }

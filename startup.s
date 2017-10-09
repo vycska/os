@@ -64,7 +64,6 @@
 .thumb_func
 Reset_Handler:
 bl init
-bl SystemInit
 bl main
 b .
 
