@@ -11,8 +11,7 @@ C_SOURCES := active_buzzer.c adc.c bme280.c ds18b20.c e2prom.c fifos.c fs.c hd44
 C_OBJECTS := $(C_SOURCES:.c=.o)
 HEADERS = $(C_SOURCES:.c=.h) LPC1769.h pitches.h os_asm.h utils-asm.h
 
-GCCFLAGS = -ffreestanding -Wall -Werror -g -Os -I./ -I./inc/ -I/usr/arm-none-eabi/include/ -L/usr/arm-none-eabi/lib/armv7-m/ -L/usr/lib/gcc/arm-none-eabi/7.2.0/armv7-m/ -mfloat-abi=soft -mcpu=cortex-m3 -mthumb -specs=nano.specs -specs=nosys.specs
-#-fdata-sections -ffunction-sections
+GCCFLAGS = -ffreestanding -Wall -Werror -g -Os -I./ -I./inc/ -I/usr/arm-none-eabi/include/ -L/usr/arm-none-eabi/lib/armv7-m/ -L/usr/lib/gcc/arm-none-eabi/7.2.0/armv7-m/ -mfloat-abi=soft -mcpu=cortex-m3 -mthumb -fdata-sections -ffunction-sections
 
 .PHONY : all
 all : $(TARGET).elf
@@ -24,8 +23,7 @@ all : $(TARGET).elf
 	arm-none-eabi-gcc -c -o $@ $(GCCFLAGS) $<
 
 $(TARGET).elf : $(A_OBJECTS) $(C_OBJECTS) $(TARGET).ld
-	arm-none-eabi-gcc -o $(TARGET).elf $(GCCFLAGS) -nostdlib -nostartfiles -T $(TARGET).ld -Wl,-Map=$(TARGET).map -Wl,-Os $(A_OBJECTS) $(C_OBJECTS) -lm -lgcc -lc_nano -lnosys
-	#-gc-sections /usr/arm-none-eabi/lib/armv7-m/libc_nano.a /usr/lib/gcc/arm-none-eabi/7.2.0/armv7-m/libgcc.a /usr/arm-none-eabi/lib/armv7-m/libnosys.a
+	arm-none-eabi-gcc -o $(TARGET).elf $(GCCFLAGS) -nostdlib -nostartfiles -T $(TARGET).ld -Wl,-Map=$(TARGET).map -Wl,-Os -Wl,-gc-sections $(A_OBJECTS) $(C_OBJECTS) -lm -lgcc -lc_nano -lnosys
 	arm-none-eabi-objdump -D $(TARGET).elf > $(TARGET).lst
 	arm-none-eabi-objcopy -O binary $(TARGET).elf $(TARGET).bin
 	arm-none-eabi-objcopy -I ihex $(TARGET).elf $(TARGET).hex
