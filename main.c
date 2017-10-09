@@ -64,11 +64,9 @@ int main(void) {
 void init(void) {
 	char *dst,*src;
 	//copy data to ram
-	for(src=&_data_start_lma,dst=&_data_start;dst<&_data_end;src++,dst++)
-		*dst=*src;
+	for(src=&_data_start_lma,dst=&_data_start;dst<&_data_end;src++,dst++) *dst=*src;
 	//zero bss
-	for(dst=&_bss_start;dst<&_bss_end;dst++)
-		*dst=0;
+	for(dst=&_bss_start;dst<&_bss_end;dst++) *dst=0;
 }
 
 void SystemInit(void) {
