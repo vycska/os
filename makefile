@@ -1,6 +1,8 @@
 # make all
 # make clean
 # make install
+# make ctags
+# make cscope
 
 #todo: automatic source's header file dependencies
 
