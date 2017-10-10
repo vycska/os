@@ -3,6 +3,7 @@
 # make install
 # make ctags
 # make cscope
+# make print-<variable>
 
 #todo: automatic source's header file dependencies
 

@@ -42,7 +42,7 @@ void OS_Init(int k,...) {
 	}
 	va_end(va);
 	
-  RunPt = &tcbs[0];
+	RunPt = &tcbs[0];
 }
 
 void Scheduler(void) {
