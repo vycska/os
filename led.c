@@ -30,8 +30,17 @@ void Board_LED_Init(void) {
 }
 
 void Board_LED(unsigned char rgb) { //0th bit - r, 1st bit - g, 2nd bit - b
-	rgb = rgb^0x7; //led is negative logic, therefore we invert the bits
-	FIO0PIN = (FIO0PIN&(~(1<<22))) | (((rgb>>0)&1)<<22);
-	FIO3PIN = (FIO3PIN&(~(1<<25))) | (((rgb>>1)&1)<<25);
-	FIO3PIN = (FIO3PIN&(~(1<<26))) | (((rgb>>2)&1)<<26);
+	if((rgb>>0)&1) FIO0CLR |= (1<<22);
+	else FIO0SET |= (1<<22);
+
+	if((rgb>>1)&1) FIO3CLR |= (1<<25);
+	else FIO3SET |= (1<<25);
+
+	if((rgb>>2)&1) FIO3CLR |= (1<<26);
+	else FIO3SET |= (1<<26);
+
+	//rgb = rgb^0x7; //led is negative logic, therefore we invert the bits
+	//FIO0PIN = (FIO0PIN&(~(1<<22))) | (((rgb>>0)&1)<<22);
+	//FIO3PIN = (FIO3PIN&(~(1<<25))) | (((rgb>>1)&1)<<25);
+	//FIO3PIN = (FIO3PIN&(~(1<<26))) | (((rgb>>2)&1)<<26);
 }

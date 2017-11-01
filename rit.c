@@ -26,8 +26,8 @@ void RIT_Init(void) { //1ms
 void RIT_IRQHandler(void) { // process sleeping threads
 	struct tcb *cursor;
 	
-	//incremented milliseconds timer
-	millis+=+1;
+	//increment milliseconds timer
+	millis+=1;
 	
 	//process sleeping threads
 	for(cursor=RunPt->next;cursor!=RunPt;cursor=cursor->next)
@@ -38,8 +38,9 @@ void RIT_IRQHandler(void) { // process sleeping threads
 	if(boardled_config.counter==boardled_config.dc*boardled_config.period/100) {
 		Board_LED(0);
 	}
-	else if(boardled_config.counter==boardled_config.period) {
+	else if(boardled_config.counter>=boardled_config.period) {
 		boardled_config.counter=0;
+		boardled_config.active_color = (boardled_config.active_color+1)%8;
 		Board_LED(boardled_config.active_color);
 	}
 	

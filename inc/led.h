@@ -3,7 +3,8 @@
 
 struct BoardLed_Config {
 	char active_color,dc;
-	int period,counter;
+	int period;
+	volatile int counter;
 };
 
 void Board_LED_Init(void);

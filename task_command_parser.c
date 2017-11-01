@@ -92,6 +92,12 @@ void Task_Command_Parser(void) {
 				OS_Blocking_Wait(&smphrFinished);
 				break;
 			}
+			case 0x669b: {
+				mysprintf(buf,"active_color: %d, dc: %d, period: %d, counter: %d",(int)boardled_config.active_color,(int)boardled_config.dc,(int)boardled_config.period,(int)boardled_config.counter);
+				Fifo_Uart0_Put(buf,&smphrFinished);
+				OS_Blocking_Wait(&smphrFinished);
+				break;
+			}
 			case 0xd480: { //led_active_color:x
 				boardled_config.active_color=params[2];
 				break;
