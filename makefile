@@ -36,7 +36,7 @@ $(TARGET).elf : $(A_OBJECTS) $(C_OBJECTS) $(TARGET).ld
 
 .PHONY : clean
 clean :
-	rm -f *.o *.elf *.bin *.hex *.map *.lst
+	rm -f *.o *.elf *.bin *.hex *.map *.lst cscope* tags
 
 .PHONY : install
 install :
