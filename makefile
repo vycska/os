@@ -18,7 +18,7 @@ GCCFLAGS = -ffreestanding -Wall -Werror -Os -I./ -I./inc/ -I/usr/arm-none-eabi/i
 #-specs=nano.specs -specs=nosys.specs
 #-g
 
-.PHONY : all
+.PHONY : all clean install ctags cscope print-%
 all : $(TARGET).elf
 
 %.o : %.s
@@ -34,24 +34,19 @@ $(TARGET).elf : $(A_OBJECTS) $(C_OBJECTS) $(TARGET).ld
 	arm-none-eabi-objcopy -O binary $(TARGET).elf $(TARGET).bin
 	arm-none-eabi-objcopy -I ihex $(TARGET).elf $(TARGET).hex
 
-.PHONY : clean
 clean :
 	rm -f *.o *.elf *.bin *.hex *.map *.lst cscope* tags
 
-.PHONY : install
 install :
 	lpc21isp $(TARGET).hex /dev/ttyUSB0 115200 4000
 
-.PHONY : ctags
 ctags :
-	ctags -R *
+	ctags -R --extra=+f *
 
-.PHONY : cscope
 cscope :
 	find . -name "*.[csh]" > cscope.files
 	cscope -q -R -b -i cscope.files
 
-.PHONY : print-%
 print-% :
 	@echo $* = $($*)
 	$(info TARGET is $(TARGET))
