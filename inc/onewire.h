@@ -10,6 +10,6 @@ unsigned char onewire_readbit(void);
 void onewire_writebit(unsigned char);
 unsigned char onewire_receivebyte(void);
 void onewire_sendbyte(unsigned char);
-unsigned char onewire_crc8(unsigned char*,int);
+unsigned char onewire_crc8(unsigned char *, int);
 
 #endif

@@ -2,7 +2,7 @@
 #define TIMER_H_
 
 void Timer0_Init(void);
-void Timer0_Delay_Int(int,int*);
+void Timer0_Delay_Int(int, int *);
 void Timer0_Delay_NoInt(int);
 void TIMER0_IRQHandler(void);
 

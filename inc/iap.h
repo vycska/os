@@ -28,14 +28,14 @@
 #define IAP_STA_BUSY										11
 
 int sector(unsigned int);
-int iap_prepare_sectors(unsigned int,unsigned int);
-int iap_copy_ram_to_flash(unsigned int,unsigned char*,unsigned int);
-int iap_erase_sectors(int,int);
-int iap_check_sectors_blank(unsigned int,unsigned int);
+int iap_prepare_sectors(unsigned int, unsigned int);
+int iap_copy_ram_to_flash(unsigned int, unsigned char *, unsigned int);
+int iap_erase_sectors(int, int);
+int iap_check_sectors_blank(unsigned int, unsigned int);
 unsigned int iap_read_part_id(void);
 unsigned short iap_read_boot_code_version(void);
-unsigned int* iap_read_device_serial_number(void);
-int iap_compare_memory_contents(unsigned int,unsigned int,int);
+unsigned int *iap_read_device_serial_number(void);
+int iap_compare_memory_contents(unsigned int, unsigned int, int);
 void iap_reinvoke_isp(void);
 
 #endif

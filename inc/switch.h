@@ -2,7 +2,7 @@
 #define SWITCH_H_
 
 struct sExternalSwitch {
-	char level;
+   char level;
 };
 
 void Switch_Init(void);
