@@ -8,7 +8,7 @@
 #include "LPC1769.h"
 #include <string.h>
 
-extern int mtx_files[DIRECTORY_ENTRIES];
+extern int mtx_filesystem;
 extern struct Task_BME280_Data task_bme280_data;
 extern struct Task_DS18B20_Data task_ds18b20_data;
 
@@ -28,10 +28,10 @@ void Task_Log(void) {
          if((f = fs_filesearch(LOG_FILE_NAME)) == STATUS_ERROR)
             f = fs_filenew(LOG_FILE_NAME, 0, sizeof(struct Log_Record));
          if(f != STATUS_ERROR) {
-            OS_Blocking_Wait(&mtx_files[f]);
+            OS_Blocking_Wait(&mtx_filesystem);
             fs_fileappend(f, task_log_data.data_buf, 256);
             fs_flush();
-            OS_Blocking_Signal(&mtx_files[f]);
+            OS_Blocking_Signal(&mtx_filesystem);
          }
       }
       OS_Sleep(60000);          //1 min

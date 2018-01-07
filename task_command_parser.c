@@ -17,7 +17,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-extern int mtx_files[DIRECTORY_ENTRIES];
+extern int mtx_filesystem;
 extern long long int millis;
 extern struct BoardLed_Config boardled_config;
 extern struct tcb *RunPt;
@@ -351,7 +351,7 @@ void Task_Command_Parser(void) {
 
             f = fs_filesearch(LOG_FILE_NAME);
             if(f != STATUS_ERROR) {
-               OS_Blocking_Wait(&mtx_files[f]);
+               OS_Blocking_Wait(&mtx_filesystem);
                for(rfs = 0, fs = fs_filesize(f); rfs < fs; rfs += 16) {
                   fs_fileread_seq(f, b, 16);
                   ptm = localtime((time_t *) ((unsigned int *)&b[0]));
@@ -360,7 +360,7 @@ void Task_Command_Parser(void) {
                   Fifo_Uart0_Put(buf, &smphrFinished);
                   OS_Blocking_Wait(&smphrFinished);
                }
-               OS_Blocking_Signal(&mtx_files[f]);
+               OS_Blocking_Signal(&mtx_filesystem);
             }
             break;
          }

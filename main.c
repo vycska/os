@@ -28,13 +28,13 @@
 #include "LPC1769.h"
 
 extern char _data_start_lma, _data_start, _data_end, _bss_start, _bss_end;
-int mtx_i2c[3], mtx_timer[4], mtx_files[DIRECTORY_ENTRIES];
+int mtx_filesystem, mtx_i2c[3], mtx_timer[4];
 long long int millis;
 
 int main(void) {
    int i;
 
-   DisableInterrupts();
+   DisableInterrupts(); //interrupts will be enabled in OS_Start()
    PCONP = 0;                   //gate off clock for peripherals
    PLL0_Init();
    PCLKSEL0 = 0;                //select clock for peripherals to be CCLK/4
@@ -55,18 +55,16 @@ int main(void) {
 
    Active_Buzzer_Init();
    Passive_Buzzer_Init();
-
-   //interrupts will be enabled in OS_Start()
+   
    Fifo_HD44780_Init();
    Fifo_Uart0_Init();
    Fifo_Command_Parser_Init();
 
+   OS_InitSemaphore(&mtx_filesystem, 1);
    for(i = 0; i < 3; i++)
       OS_InitSemaphore(&mtx_i2c[i], 1);
    for(i = 0; i < 4; i++)
       OS_InitSemaphore(&mtx_timer[i], 1);
-   for(i = 0; i < DIRECTORY_ENTRIES; i++)
-      OS_InitSemaphore(&mtx_files[i], 1);
 
    fs_mount();
    if(fs_checkdisk() == STATUS_ERROR)
