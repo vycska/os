@@ -50,7 +50,6 @@ int main(void) {
    Timer0_Init();
    Timer1_Init();
    Timer2_Init();
-   Timer3_Init();
 
    RTC_Init();
 

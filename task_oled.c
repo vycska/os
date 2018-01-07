@@ -106,19 +106,19 @@ uint8_t u8x8_gpio_and_delay(u8x8_t *u8x8,uint8_t msg,uint8_t arg_int,void *arg_p
          FIO1SET |= (1u<<31); //at start line is released
          break;
       case U8X8_MSG_DELAY_NANO: //delay arg_int*1 nano second
-         Timer0_Delay_NoInt(arg_int);
+         Timer0_Delay(arg_int);
          break;
       case U8X8_MSG_DELAY_100NANO: //delay arg_int*100 nano seconds
-         Timer0_Delay_NoInt(arg_int*100);
+         Timer0_Delay(arg_int*100);
          break;
       case U8X8_MSG_DELAY_10MICRO: //delay arg_int * 10 micro seconds
-         Timer0_Delay_NoInt(arg_int*10*1000);
+         Timer0_Delay(arg_int*10*1000);
          break;
       case U8X8_MSG_DELAY_MILLI: //delay arg_int*1 milli second
-         Timer0_Delay_NoInt(arg_int*1000*1000);
+         Timer0_Delay(arg_int*1000*1000);
          break;
       case U8X8_MSG_DELAY_I2C: //arg_int is the I2C speed in 100 kHz, e.g. 4=400 Hz; arg_int=1: delay by 5 us, arg_int=4: delay by 1.25 us
-         Timer0_Delay_NoInt(5.0/arg_int*1000);
+         Timer0_Delay(5.0/arg_int*1000);
          break;
       case U8X8_MSG_GPIO_I2C_CLOCK: //arg_int=0: output low at I2C clock pin; arg_int=1: input dir with pullup high for I2C clock pin
          if(arg_int==0) FIO1CLR |= (1u<<31);
