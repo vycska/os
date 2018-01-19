@@ -12,7 +12,7 @@ SECTIONS
 {
 	.intvecs : {
 		_intvecs_start = .;
-		KEEP(startup.o(.intvecs))
+		KEEP(*(.intvecs))
 		. = ALIGN(0x10);
 		_intvecs_end = .;
 	} > rom = 0xaaaaaaaa

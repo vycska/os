@@ -4,38 +4,64 @@
 # make ctags
 # make cscope
 # make print-<variable>
+#/usr/arm-none-eabi/lib/armv7-m/libc_nano.a /usr/lib/gcc/arm-none-eabi/7.2.0/armv7-m/libgcc.a /usr/arm-none-eabi/lib/armv7-m/libnosys.a
+#-specs=nano.specs -specs=nosys.specs -g
 
-#todo: automatic source's header file dependencies
+################################################################################
+################################################################################
+################################################################################
+################################################################################
+################################################################################
+################################################################################
+################################################################################
 
 TARGET := os
-A_SOURCES := os-asm.s startup.s utils-asm.s
-A_OBJECTS := $(A_SOURCES:.s=.o)
-C_SOURCES := active_buzzer.c adc.c bme280.c ds18b20.c e2prom.c fifos.c fs.c hd44780.c i2c.c iap.c led.c main.c onewire.c os.c passive_buzzer.c pll.c pwm.c rit.c rtc.c switch.c systick.c task_adc.c task_bme280.c task_command_parser.c task_ds18b20.c task_hd44780.c task_idle.c task_log.c task_oled.c task_switch.c task_uart0_output.c timer.c uart.c utils.c u8g2_bitmap.c u8g2_box.c u8g2_buffer.c u8g2_circle.c u8g2_cleardisplay.c u8g2_d_memory.c u8g2_d_setup.c u8g2_font.c u8g2_fonts.c u8g2_hvline.c u8g2_input_value.c u8g2_intersection.c u8g2_kerning.c u8g2_line.c u8g2_ll_hvline.c u8g2_message.c u8g2_polygon.c u8g2_selection_list.c u8g2_setup.c u8x8_8x8.c u8x8_byte.c u8x8_cad.c u8x8_debounce.c u8x8_display.c u8x8_d_ssd1306_128x64_noname.c u8x8_d_stdio.c u8x8_fonts.c u8x8_gpio.c u8x8_input_value.c u8x8_message.c u8x8_selection_list.c u8x8_setup.c u8x8_string.c u8x8_u16toa.c u8x8_u8toa.c
-C_OBJECTS := $(C_SOURCES:.c=.o)
-#HEADERS = $(C_SOURCES:.c=.h) LPC1769.h pitches.h os_asm.h utils-asm.h
 
-GCCFLAGS = -ffreestanding -Wall -Werror -Os -I./ -I./inc/ -I/usr/arm-none-eabi/include/ -L/usr/arm-none-eabi/lib/armv7-m/ -L/usr/lib/gcc/arm-none-eabi/7.2.0/armv7-m/ -mfloat-abi=soft -mcpu=cortex-m3 -mthumb -fdata-sections -ffunction-sections
-#-specs=nano.specs -specs=nosys.specs
-#-g
+DEPDIR := .deps
+OBJDIR := .objs
+
+vpath %s src
+vpath %c src:src/u8g2
+vpath %h inc:inc/u8g2
+
+HEADERS := $(sort $(shell find . -name '*.h' -printf '%f '))
+A_SOURCES := $(sort $(shell find . -name '*.s' -printf '%f '))
+C_SOURCES := $(sort $(shell find . -name '*.c' -printf '%f '))
+DEPS := $(patsubst %.c,$(DEPDIR)/%.d,$(C_SOURCES))
+A_OBJECTS := $(addprefix $(OBJDIR)/,$(A_SOURCES:.s=.o))
+C_OBJECTS := $(addprefix $(OBJDIR)/,$(C_SOURCES:.c=.o))
+OBJS := $(A_OBJECTS) $(C_OBJECTS)
+
+GCCFLAGS = -ffreestanding -Wall -Werror -Os -I./inc -I./inc/u8g2 -I/usr/arm-none-eabi/include -L/usr/arm-none-eabi/lib/armv7-m -L/usr/lib/gcc/arm-none-eabi/7.2.0/armv7-m -mfloat-abi=soft -mcpu=cortex-m3 -mthumb -fdata-sections -ffunction-sections
 
 .PHONY : all clean install vim print-%
+
 all : $(TARGET).elf
 
-%.o : %.s
-	arm-none-eabi-gcc -c -o $@ $(GCCFLAGS) -Wa,--warn -Wa,--fatal-warnings $^
+$(TARGET).elf : $(OBJS)
+	arm-none-eabi-gcc $(GCCFLAGS) -nostdlib -nostartfiles -Wl,-Map=$(TARGET).map -Wl,-Os -Wl,-gc-sections -o $@ $^ -lgcc -lc_nano -lnosys -lm -T $(TARGET).ld 
+	arm-none-eabi-objdump -D $@ > $(TARGET).lst
+	arm-none-eabi-objcopy -O binary $@ $(TARGET).bin
+	arm-none-eabi-objcopy -I ihex $@ $(TARGET).hex
 
-%.o : %.c
-	arm-none-eabi-gcc -c -o $@ $(GCCFLAGS) $<
+$(OBJDIR)/%.o : %.s
+	@if [ ! -d "$(OBJDIR)" ]; then mkdir -p "$(OBJDIR)"; fi
+	arm-none-eabi-gcc -c $(GCCFLAGS) -Wa,--warn -Wa,--fatal-warnings -o $@ $^
 
-$(TARGET).elf : $(A_OBJECTS) $(C_OBJECTS) $(TARGET).ld
-	arm-none-eabi-gcc -o $(TARGET).elf $(GCCFLAGS) -nostdlib -nostartfiles -T $(TARGET).ld -Wl,-Map=$(TARGET).map -Wl,-Os $(A_OBJECTS) $(C_OBJECTS) -lm -lgcc -lc_nano -lnosys -Wl,-gc-sections
-	#/usr/arm-none-eabi/lib/armv7-m/libc_nano.a /usr/lib/gcc/arm-none-eabi/7.2.0/armv7-m/libgcc.a /usr/arm-none-eabi/lib/armv7-m/libnosys.a
-	arm-none-eabi-objdump -D $(TARGET).elf > $(TARGET).lst
-	arm-none-eabi-objcopy -O binary $(TARGET).elf $(TARGET).bin
-	arm-none-eabi-objcopy -I ihex $(TARGET).elf $(TARGET).hex
+$(C_OBJECTS) :
+	@if [ ! -d "$(OBJDIR)" ]; then mkdir -p "$(OBJDIR)"; fi
+	arm-none-eabi-gcc -c $(GCCFLAGS) -o $@ $<
+
+$(DEPDIR)/%.d : %.c $(HEADERS)
+	@if [ ! -d "$(DEPDIR)" ]; then mkdir -p "$(DEPDIR)"; fi
+	arm-none-eabi-gcc -I./inc -I./inc/u8g2 -E -MM -MT $(OBJDIR)/$(patsubst %.c,%.o,$(notdir $<)) -MF $@ $<
+
+ifneq ($(MAKECMDGOALS),clean)
+include $(DEPS)
+endif
 
 clean :
-	rm -f *.o *.elf *.bin *.hex *.map *.lst cscope* tags
+	rm -rf *.o *.elf *.bin *.hex *.map *.lst cscope* tags $(DEPDIR) $(OBJDIR)
 
 install :
 	lpc21isp $(TARGET).hex /dev/ttyUSB0 115200 4000
