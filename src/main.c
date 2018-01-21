@@ -15,6 +15,7 @@
 #include "task_bme280.h"
 #include "task_command_parser.h"
 #include "task_ds18b20.h"
+#include "task_dsm501.h"
 #include "task_hd44780.h"
 #include "task_idle.h"
 #include "task_log.h"
@@ -47,9 +48,9 @@ int main(void) {
    I2C0_Init();
    I2C1_Init();
 
-   Timer0_Init();
    Timer1_Init();
    Timer2_Init();
+   Timer3_Init();
 
    RTC_Init();
 
@@ -76,7 +77,8 @@ int main(void) {
          "hd44780", 6, &Task_HD44780,
          "command_parser", 7, &Task_Command_Parser,
          "bme280", 10, &Task_BME280,
-         "adc", 15, &Task_ADC,
+         //"adc", 15, &Task_ADC,
+         "dsm501", 15, &Task_DSM501,
          "log", 11, &Task_Log,
          "ds18b20", 8, &Task_DS18B20,
          "oled", 12, &Task_Oled,

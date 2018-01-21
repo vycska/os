@@ -32,7 +32,20 @@ A_OBJECTS := $(addprefix $(OBJDIR)/,$(A_SOURCES:.s=.o))
 C_OBJECTS := $(addprefix $(OBJDIR)/,$(C_SOURCES:.c=.o))
 OBJS := $(A_OBJECTS) $(C_OBJECTS)
 
-GCCFLAGS = -ffreestanding -Wall -Werror -Os -I./inc -I./inc/u8g2 -I/usr/arm-none-eabi/include -L/usr/arm-none-eabi/lib/armv7-m -L/usr/lib/gcc/arm-none-eabi/7.2.0/armv7-m -mfloat-abi=soft -mcpu=cortex-m3 -mthumb -fdata-sections -ffunction-sections
+GCCFLAGS = -ffreestanding \
+	   -Wall \
+	   -Werror \
+	   -Os \
+	   -I./inc \
+	   -I./inc/u8g2 \
+	   -I/usr/arm-none-eabi/include \
+	   -L/usr/arm-none-eabi/lib/armv7-m \
+	   -L/usr/lib/gcc/arm-none-eabi/7.2.0/armv7-m \
+	   -mfloat-abi=soft \
+	   -mcpu=cortex-m3 \
+	   -mthumb \
+	   -fdata-sections \
+	   -ffunction-sections
 
 .PHONY : all clean install vim print-%
 

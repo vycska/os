@@ -27,9 +27,9 @@ void Task_DS18B20(void) {
 
    OS_InitSemaphore(&smphrFinished, 0);
 
-   OS_Blocking_Wait(&mtx_timer[0]);
+   OS_Blocking_Wait(&mtx_timer[3]);
    j = DS18B20_ReadROM(data);
-   OS_Blocking_Signal(&mtx_timer[0]);
+   OS_Blocking_Signal(&mtx_timer[3]);
 
    if(j == DS18B20_OK) {
       l = mysprintf(s, "one-wire device: ");
@@ -40,16 +40,16 @@ void Task_DS18B20(void) {
    }
 
    while(1) {
-      OS_Blocking_Wait(&mtx_timer[0]);
+      OS_Blocking_Wait(&mtx_timer[3]);
       DS18B20_ConvertTAll();
-      OS_Blocking_Signal(&mtx_timer[0]);
+      OS_Blocking_Signal(&mtx_timer[3]);
 
       OS_Sleep(750);            //conversion time
 
       for(i = 0; i <= 2; i++) { //gali buti prijungti keletas device'u
-         OS_Blocking_Wait(&mtx_timer[0]);
+         OS_Blocking_Wait(&mtx_timer[3]);
          j = DS18B20_ReadScratchpad((i == 2 ? 0 : devices[i]), data);
-         OS_Blocking_Signal(&mtx_timer[0]);
+         OS_Blocking_Signal(&mtx_timer[3]);
 
          if(j == DS18B20_OK) {
             t = DS18B20_GetTemperature(data);

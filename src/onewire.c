@@ -27,7 +27,7 @@ unsigned char onewire_getlinevalue(void) {
 }
 
 void onewire_delay(int us) {
-   Timer0_Delay(1000*us);
+   Timer3_Delay(1000*us);
 }
 
 int onewire_reset(void) {       //1 - presence pulse detected, 0 - presence pulse not detected

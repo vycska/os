@@ -22,13 +22,13 @@ void Task_Oled(void) {
    double v;
 
    Fifo_Uart0_Put("Task_Oled has started",0);
-   OS_Blocking_Wait(&mtx_timer[0]);
+   OS_Blocking_Wait(&mtx_timer[3]);
    u8g2_Setup_ssd1306_i2c_128x64_noname_f(&u8g2,U8G2_R1,u8x8_byte_sw_i2c,u8x8_gpio_and_delay); //init u8g2 structure
    u8g2_InitDisplay(&u8g2); //send init sequence to the display, display is in sleep mode
    u8g2_SetPowerSave(&u8g2,0); //wake up display
-   OS_Blocking_Signal(&mtx_timer[0]);
+   OS_Blocking_Signal(&mtx_timer[3]);
    while(1) {
-      OS_Blocking_Wait(&mtx_timer[0]);
+      OS_Blocking_Wait(&mtx_timer[3]);
 
       u8g2_ClearBuffer(&u8g2);
 
@@ -83,7 +83,7 @@ void Task_Oled(void) {
 
       u8g2_SendBuffer(&u8g2);
 
-      OS_Blocking_Signal(&mtx_timer[0]);
+      OS_Blocking_Signal(&mtx_timer[3]);
       OS_Sleep(1000);
    }
 }
@@ -106,19 +106,19 @@ uint8_t u8x8_gpio_and_delay(u8x8_t *u8x8,uint8_t msg,uint8_t arg_int,void *arg_p
          FIO1SET |= (1u<<31); //at start line is released
          break;
       case U8X8_MSG_DELAY_NANO: //delay arg_int*1 nano second
-         Timer0_Delay(arg_int);
+         Timer3_Delay(arg_int);
          break;
       case U8X8_MSG_DELAY_100NANO: //delay arg_int*100 nano seconds
-         Timer0_Delay(arg_int*100);
+         Timer3_Delay(arg_int*100);
          break;
       case U8X8_MSG_DELAY_10MICRO: //delay arg_int * 10 micro seconds
-         Timer0_Delay(arg_int*10*1000);
+         Timer3_Delay(arg_int*10*1000);
          break;
       case U8X8_MSG_DELAY_MILLI: //delay arg_int*1 milli second
-         Timer0_Delay(arg_int*1000*1000);
+         Timer3_Delay(arg_int*1000*1000);
          break;
       case U8X8_MSG_DELAY_I2C: //arg_int is the I2C speed in 100 kHz, e.g. 4=400 Hz; arg_int=1: delay by 5 us, arg_int=4: delay by 1.25 us
-         Timer0_Delay(5.0/arg_int*1000);
+         Timer3_Delay(5.0/arg_int*1000);
          break;
       case U8X8_MSG_GPIO_I2C_CLOCK: //arg_int=0: output low at I2C clock pin; arg_int=1: input dir with pullup high for I2C clock pin
          if(arg_int==0) FIO1CLR |= (1u<<31);

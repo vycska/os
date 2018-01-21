@@ -44,7 +44,7 @@ void HD44780_Init(void) {
    HD44780_InitPins();
 
    //wake up
-   Timer0_Delay(50*1000*1000);   //50ms
+   Timer3_Delay(50*1000*1000);   //50ms
    HD44780_CommandWrite(0x30, 5000);
    HD44780_CommandWrite(0x30, 200);
    HD44780_CommandWrite(0x30, 50);
@@ -121,9 +121,9 @@ void HD44780_CommandWrite(unsigned char d,int  delay) {
    FIO0CLR |= (1 << 10);        //RW low - write
    FIO2PIN = (FIO2PIN & (~0xff)) | d;
    FIO0SET |= (1 << 11);        //E high - start
-   Timer0_Delay(10*1000);
+   Timer3_Delay(10*1000);
    FIO0CLR |= (1 << 11);        //E low - finish transaction
-   Timer0_Delay(delay*1000);
+   Timer3_Delay(delay*1000);
 }
 
 void HD44780_DataWrite(unsigned char d) {
@@ -131,9 +131,9 @@ void HD44780_DataWrite(unsigned char d) {
    FIO0CLR |= (1 << 10);        //RW low - write
    FIO2PIN = (FIO2PIN & (~0xff)) | d;
    FIO0SET |= (1 << 11);        //E high - start
-   Timer0_Delay(10*1000);
+   Timer3_Delay(10*1000);
    FIO0CLR |= (1 << 11);        //E low - finish transaction
-   Timer0_Delay(50*1000);
+   Timer3_Delay(50*1000);
 }
 
 void HD44780_DisplayString(char *s, int l, int line, int pos) { //lines: 0 - 0x00, 1 - 0x40, 2 - 0x14, 3 - 0x54

@@ -19,21 +19,9 @@ Registers:
 * CTCR - count control register [select between Timer or Counter mode]
 */
 
-void Timer0_Init(void) {        //naudojamas HD44780
-   PCONP |= (1 << 1);           //power
-   PCLKSEL0 = (PCLKSEL0 & (~(3 << 2))) | (1 << 2);      //clock=CCLK
-
-   T0TCR = 0x02;                //TC and PC counters disabled and reset
-   T0CTCR &= (~(3 << 0));       //timer mode
-   T0PR = 0;                    //prescale value (TC is incremented every this value+1)
-}
-
-void Timer0_Delay(int ns) {
-   T0TCR = 0x02;                //TC and PC counters disabled and reset
-   T0MCR = (1 << 2);            //counters stopped with disable on MR0
-   T0MR0 = MAX2(ns*CLOCK/1000,2)-1;      //match value
-   T0TCR = 0x01;                //TC and PC counters and enabled and anti-reset
-   while(T0TC < T0MR0);
+void Timer0_Init(void) { //naudojamas periodiskas ADC matavimui
+   PCONP |= (1<<1);
+   PCLKSEL0 = (PCLKSEL0 & (~(3<<2))) | (1<<2); //PCLK=CCLK
 }
 
 void Timer1_Init(void) {        //naudojamas su switchu
@@ -81,4 +69,21 @@ void TIMER2_IRQHandler(void) {
       Passive_Buzzer_Tone(passive_buzzer_config.song[passive_buzzer_config.current_songtone].freq);
       T2IR |= (1 << 1);         //reset the interrupt
    }
+}
+
+void Timer3_Init(void) {        //naudojamas HD44780
+   PCONP |= (1 << 23);           //power
+   PCLKSEL1 = (PCLKSEL1 & (~(3 << 14))) | (1 << 14);      //clock=CCLK
+
+   T3TCR = 0x02;                //TC and PC counters disabled and reset
+   T3CTCR &= (~(3 << 0));       //timer mode
+   T3PR = 0;                    //prescale value (TC is incremented every this value+1)
+}
+
+void Timer3_Delay(int ns) {
+   T3TCR = 0x02;                //TC and PC counters disabled and reset
+   T3MCR = (1 << 2);            //counters stopped with disable on MR0
+   T3MR0 = MAX2(ns*CLOCK/1000,2)-1;      //match value
+   T3TCR = 0x01;                //TC and PC counters and enabled and anti-reset
+   while(T3TC < T3MR0);
 }
