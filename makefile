@@ -59,7 +59,7 @@ $(DEPDIR)/%.d : ;
 
 ################################################################################
 
-.PHONY : all libs clean install tags depdir objdir libdir print-%
+.PHONY : all libs clean install tags print-%
 
 all : $(TARGET).elf
 
