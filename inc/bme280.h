@@ -1,5 +1,5 @@
-#ifndef BME280_H
-#define BME280_H
+#ifndef __BME280_H__
+#define __BME280_H__
 
 #define BME280_SLAVE (0x76)
 

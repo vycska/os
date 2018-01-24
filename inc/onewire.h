@@ -1,5 +1,5 @@
-#ifndef ONEWIRE_H
-#define ONEWIRE_H
+#ifndef __ONEWIRE_H__
+#define __ONEWIRE_H__
 
 void onewire_init(void);
 void onewire_drivelinelow(void);

@@ -2,10 +2,6 @@
 
 ################################################################################
 
-vpath %s src
-vpath %c src:src/u8g2
-vpath %h inc:inc/u8g2
-
 TARGET := os
 
 SRCDIR := src
@@ -33,6 +29,14 @@ CFLAGS := -mcpu=cortex-m3 -mthumb -mfloat-abi=soft -mlittle-endian -ffreestandin
 LDFLAGS := -nostdlib -nostartfiles -L $(LIBDIR) -L/usr/arm-none-eabi/lib/armv7-m -L/usr/lib/gcc/arm-none-eabi/7.2.0/armv7-m -T $(TARGET).ld -Wl,-Map=$(TARGET).map -Wl,-Os -Wl,-gc-sections
 LDLIBS := -lgcc -lc_nano -lnosys -lm -lu8g2
 
+vpath %s $(SRCDIR)
+vpath %c $(SRCDIR):$(SRCDIR)/u8g2
+vpath %h $(INCDIR):$(INCDIR)/u8g2
+
+$(shell if [ ! -d '$(DEPDIR)' ]; then mkdir -p '$(DEPDIR)'; fi)
+$(shell if [ ! -d '$(OBJDIR)' ]; then mkdir -p '$(OBJDIR)'; fi)
+$(shell if [ ! -d '$(LIBDIR)' ]; then mkdir -p '$(LIBDIR)'; fi)
+
 ################################################################################
 
 $(TARGET).elf : $(AOBJS) $(COBJS)
@@ -42,14 +46,16 @@ $(TARGET).elf : $(AOBJS) $(COBJS)
 	arm-none-eabi-objcopy -O binary $@ $(TARGET).bin
 	arm-none-eabi-objcopy -I ihex $@ $(TARGET).hex
 
-$(OBJDIR)/%.o : %.s | objdir
+$(OBJDIR)/%.o : %.s
 	arm-none-eabi-gcc $< -c $(CFLAGS) $(ASFLAGS) -o $@
 
-$(OBJDIR)/%.o : | objdir
+$(OBJDIR)/%.o : %.c $(DEPDIR)/%.d
 	arm-none-eabi-gcc $< -c $(CPPFLAGS) $(CFLAGS) -o $@
+	arm-none-eabi-gcc $< -E $(CPPFLAGS) -MM -MP -MT $@ -MF $(DEPDIR)/$*.d && touch $@
 
-$(DEPDIR)/%.d : %.c $(HDRS) | depdir
-	arm-none-eabi-gcc $< -E $(CPPFLAGS) -MM -MT $(OBJDIR)/$(patsubst %.c,%.o,$(notdir $<)) -MF $@
+$(DEPDIR)/%.d : ;
+
+.PRECIOUS : $(DEPDIR)/%.d
 
 ################################################################################
 
@@ -59,7 +65,7 @@ all : $(TARGET).elf
 
 libs : $(LIBDIR)/libu8g2.a
 
-$(LIBDIR)/libu8g2.a : $(U8G2OBJS) | libdir
+$(LIBDIR)/libu8g2.a : $(U8G2OBJS)
 	arm-none-eabi-ar -rcsDv --target=elf32-littlearm $@ $^
 
 clean :
@@ -73,27 +79,13 @@ tags :
 	find . -name '*.[csh]' > cscope.files
 	cscope -q -R -b -i cscope.files
 
-depdir :
-	@if [ ! -d '$(DEPDIR)' ]; then mkdir -p '$(DEPDIR)'; fi
-
-objdir :
-	@if [ ! -d '$(OBJDIR)' ]; then mkdir -p '$(OBJDIR)'; fi
-
-libdir :
-	@if [ ! -d '$(LIBDIR)' ]; then mkdir -p '$(LIBDIR)'; fi
-
 print-% :
 	@echo $* = $($*)
 
 ################################################################################
 
-ifeq (,$(filter $(MAKECMDGOALS),clean tags libs $(LIBDIR)/libu8g2.a))
-   include $(CDEPS)
-endif
-
-ifeq ($(MAKECMDGOALS),$(filter $(MAKECMDGOALS),libs $(LIBDIR)/libu8g2.a))
-   include $(U8G2DEPS)
-endif
+-include $(CDEPS)
+-include $(U8G2DEPS)
 
 ################################################################################
 
