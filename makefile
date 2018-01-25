@@ -45,6 +45,7 @@ $(TARGET).elf : $(AOBJS) $(COBJS)
 	arm-none-eabi-objdump -D $@ > $(TARGET).lst
 	arm-none-eabi-objcopy -O binary $@ $(TARGET).bin
 	arm-none-eabi-objcopy -I ihex $@ $(TARGET).hex
+	arm-none-eabi-size --format=sysv --common -d $(TARGET).elf
 
 $(OBJDIR)/%.o : %.s
 	arm-none-eabi-gcc $< -c $(CFLAGS) $(ASFLAGS) -o $@
