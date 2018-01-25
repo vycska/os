@@ -29,9 +29,9 @@ CFLAGS := -mcpu=cortex-m3 -mthumb -mfloat-abi=soft -mlittle-endian -ffreestandin
 LDFLAGS := -nostdlib -nostartfiles -L $(LIBDIR) -L/usr/arm-none-eabi/lib/armv7-m -L/usr/lib/gcc/arm-none-eabi/7.2.0/armv7-m -T $(TARGET).ld -Wl,-Map=$(TARGET).map -Wl,-Os -Wl,-gc-sections
 LDLIBS := -lgcc -lc_nano -lnosys -lm -lu8g2
 
-vpath %s $(SRCDIR)
-vpath %c $(SRCDIR):$(SRCDIR)/u8g2
-vpath %h $(INCDIR):$(INCDIR)/u8g2
+vpath %.s $(SRCDIR)
+vpath %.c $(SRCDIR):$(SRCDIR)/u8g2
+vpath %.h $(INCDIR):$(INCDIR)/u8g2
 
 $(shell if [ ! -d '$(DEPDIR)' ]; then mkdir -p '$(DEPDIR)'; fi)
 $(shell if [ ! -d '$(OBJDIR)' ]; then mkdir -p '$(OBJDIR)'; fi)
