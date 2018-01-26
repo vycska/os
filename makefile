@@ -18,7 +18,7 @@ U8G2OBJS := $(addprefix objs/,$(U8G2SRCS:.c=.o))
 ASFLAGS := -Wa,--warn -Wa,--fatal-warnings
 CPPFLAGS := -I inc -I inc/u8g2 -I /usr/arm-none-eabi/include
 CFLAGS := -mcpu=cortex-m3 -mthumb -mfloat-abi=soft -mlittle-endian -ffreestanding -fdata-sections -ffunction-sections -Os -Wall -Werror
-LDFLAGS := -nostdlib -nostartfiles -Llibs -L/usr/arm-none-eabi/lib/armv7-m -L/usr/lib/gcc/arm-none-eabi/7.2.0/armv7-m -T $(TARGET).ld -Wl,-Map=$(TARGET).map -Wl,-Os -Wl,-gc-sections
+LDFLAGS := -nostdlib -nostartfiles -Llibs -L/usr/arm-none-eabi/lib/armv7-m -L/usr/lib/gcc/arm-none-eabi/7.2.0/armv7-m -T $(TARGET).ld -Wl,-Map=$(TARGET).map -Wl,--cref -Wl,-Os -Wl,-gc-sections
 LDLIBS := -lgcc -lc_nano -lnosys -lm -lu8g2
 
 vpath %.h inc:inc/u8g2
