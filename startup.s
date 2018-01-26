@@ -114,7 +114,7 @@ I2C2_IRQHandler:
 .thumb_func
 SPI_IRQHandler:
 .thumb_func
-SSP0_IRQHander:
+SSP0_IRQHandler:
 .thumb_func
 SSP1_IRQHandler:
 .thumb_func
