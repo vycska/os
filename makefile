@@ -7,7 +7,7 @@ TARGET := os
 ASRCS := $(sort $(shell find . -name '*.s' -printf '%f '))
 AOBJS := $(addprefix objs/,$(ASRCS:.s=.o))
 
-CSRCS := $(sort $(shell find src -path ./src/u8g2 -prune -o -name '*.c' -printf '%f '))
+CSRCS := $(sort $(shell find src -path src/u8g2 -prune -o -name '*.c' -printf '%f '))
 CDEPS := $(patsubst %.c,deps/%.d,$(CSRCS))
 COBJS := $(addprefix objs/,$(CSRCS:.c=.o))
 
