@@ -84,6 +84,7 @@ print-% :
 
 #-specs=nano.specs
 #-specs=nosys.specs
+#-Xlinker --specs=nosys.specs
 #-g
 #/usr/lib/gcc/arm-none-eabi/7.2.0/armv7-m/libgcc.a
 #/usr/arm-none-eabi/lib/armv7-m/libc_nano.a
