@@ -9,6 +9,7 @@
 #include "led.h"
 #include "os.h"
 #include "task_log.h"
+#include "task_dsm501.h"
 #include "utils.h"
 #include "utils-asm.h"
 #include "LPC1769.h"
@@ -23,6 +24,8 @@ extern struct BoardLed_Config boardled_config;
 extern struct tcb *RunPt;
 extern struct tcb tcbs[NUMTHREADS];
 extern struct BME280_Config bme280_config;
+
+extern volatile struct sDustSensor dust_sensor[300];
 
 void params_fill(char *s, unsigned int *params) {
    char *p,                     //pointer
@@ -338,13 +341,13 @@ void Task_Command_Parser(void) {
             }
             break;
          }
-         case 0x9c8e:{         //utime
+         case 0x9c8e: {         //utime
             mysprintf(buf, "%u", utime());
             Fifo_Uart0_Put(buf, &smphrFinished);
             OS_Blocking_Wait(&smphrFinished);
             break;
          }
-         case 0xd566:{         //log_file
+         case 0xd566: {         //log_file
             char b[16];
             int f, rfs, fs;
             struct tm *ptm;
@@ -364,12 +367,22 @@ void Task_Command_Parser(void) {
             }
             break;
          }
-         case 0xbf26:{         //temp
+         case 0xbf26: {         //temp
             mysprintf(buf, "sizeof(struct Log_Record): %d", (int)sizeof(struct Log_Record));
             Fifo_Uart0_Put(buf, &smphrFinished);
             OS_Blocking_Wait(&smphrFinished);
             break;
          }
+         /*
+         case 0xf74a: { //adc
+            for(i=0;i<300;i++) {
+               mysprintf(buf,"%d : %l %u\n",i,(char*)&dust_sensor[i].millis,dust_sensor[i].value);
+               Fifo_Uart0_Put(buf, &smphrFinished);
+               OS_Blocking_Wait(&smphrFinished);
+            }
+            break;
+         }
+         */
          default:{
             Fifo_Uart0_Put("Unknown command", 0);
          }

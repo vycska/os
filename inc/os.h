@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define NUMTHREADS	10      // number of threads
+#define NUMTHREADS	11      // number of threads
 #define STACKSIZE	150     // number of 32-bit words in stack
 
 struct tcb {

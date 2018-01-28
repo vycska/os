@@ -44,5 +44,6 @@ void RIT_IRQHandler(void) {     // process sleeping threads
       Board_LED(boardled_config.active_color);
    }
 
+   AD0CR |= (1<<16); //start burst
    RICTRL |= (1 << 0);          //clear interrupt flag
 }

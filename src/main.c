@@ -1,5 +1,6 @@
 #include "main.h"
 #include "active_buzzer.h"
+#include "adc.h"
 #include "fifos.h"
 #include "fs.h"
 #include "i2c.h"
@@ -52,6 +53,7 @@ int main(void) {
    Timer2_Init();
    Timer3_Init();
 
+   ADC_Init();
    RTC_Init();
 
    Active_Buzzer_Init();
@@ -77,7 +79,7 @@ int main(void) {
          "hd44780", 6, &Task_HD44780,
          "command_parser", 7, &Task_Command_Parser,
          "bme280", 10, &Task_BME280,
-         //"adc", 15, &Task_ADC,
+         "adc", 15, &Task_ADC,
          "dsm501", 15, &Task_DSM501,
          "log", 11, &Task_Log,
          "ds18b20", 8, &Task_DS18B20,
