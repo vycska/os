@@ -8,7 +8,7 @@ extern long long int millis;
 //extern volatile struct sDustSensor dust_sensor[300];
 extern volatile struct Task_DSM501_Data task_dsm501_data;
 
-unsigned short adc[8];
+volatile unsigned short adc[8];
 
 void ADC_Init(void) {
    PCONP |= (1 << 12);                                  //power
@@ -47,7 +47,7 @@ void ADC_IRQHandler(void) {
    B = task_dsm501_data.i/8;
    b = task_dsm501_data.i%8;
    v = (task_dsm501_data.d[B] & (1<<b)) != 0;
-   if(adc[2]<1500) {
+   if(adc[2]<1000) {
       if(v) {
          task_dsm501_data.lowsum += 1;
          task_dsm501_data.d[B] &= (~(1<<b));

@@ -4,7 +4,7 @@
 #include "os.h"
 #include "LPC1769.h"
 
-extern unsigned short adc[8];
+extern volatile unsigned short adc[8];
 extern long long int millis;
 extern struct tcb *RunPt;
 extern struct BoardLed_Config boardled_config;

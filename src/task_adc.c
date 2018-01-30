@@ -5,7 +5,7 @@
 #include "utils.h"
 #include "LPC1769.h"
 
-extern unsigned short adc[8];
+extern volatile unsigned short adc[8];
 
 void Task_ADC(void) {
    char s[24];
