@@ -21,6 +21,10 @@ CFLAGS := -mcpu=cortex-m3 -mthumb -mfloat-abi=soft -mlittle-endian -ffreestandin
 LDFLAGS := -nostdlib -nostartfiles -Llibs -L/usr/arm-none-eabi/lib/armv7-m -L/usr/lib/gcc/arm-none-eabi/7.2.0/armv7-m -T $(TARGET).ld -Wl,-Map=$(TARGET).map -Wl,--cref -Wl,-Os -Wl,-gc-sections
 LDLIBS := -lgcc -lc_nano -lnosys -lm -lu8g2
 
+ifeq ($(DEBUG),1)
+   CFLAGS+=-g
+endif
+
 vpath %.h inc:inc/u8g2
 vpath %.s src
 vpath %.c src:src/u8g2
@@ -34,7 +38,7 @@ $(shell if [ ! -d libs ]; then mkdir -p libs; fi)
 $(TARGET).elf : $(AOBJS) $(COBJS)
 	$(info Linking $(TARGET))
 	arm-none-eabi-gcc $^ $(LDFLAGS) $(LDLIBS) -o $@
-	arm-none-eabi-objdump -D $@ > $(TARGET).lst
+	arm-none-eabi-objdump -d -S -z -w $@ > $(TARGET).lst
 	arm-none-eabi-objcopy -O binary $@ $(TARGET).bin
 	arm-none-eabi-objcopy -I ihex $@ $(TARGET).hex
 	arm-none-eabi-size --format=sysv --common -d $(TARGET).elf
