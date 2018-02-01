@@ -3,7 +3,7 @@
 #include "task_dsm501.h"
 #include "LPC1769.h"
 
-extern long long int millis;
+extern volatile long long int millis;
 //extern int dust_sensor_index;
 //extern volatile struct sDustSensor dust_sensor[300];
 extern volatile struct Task_DSM501_Data task_dsm501_data;

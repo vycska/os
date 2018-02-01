@@ -19,7 +19,7 @@
 #include <time.h>
 
 extern int mtx_filesystem;
-extern long long int millis;
+extern volatile long long int millis;
 extern struct BoardLed_Config boardled_config;
 extern struct tcb *RunPt;
 extern struct tcb tcbs[NUMTHREADS];

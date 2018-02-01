@@ -158,6 +158,7 @@
 #define IPR3		(*((volatile uint32_t*)0xE000E40C))
 #define IPR4		(*((volatile uint32_t*)0xE000E410))
 #define IPR5		(*((volatile uint32_t*)0xE000E414))
+#define IPR6		(*((volatile uint32_t*)0xE000E418))
 #define IPR7		(*((volatile uint32_t*)0xE000E41C))
 
 #define ICPR0		(*((volatile uint32_t*)0xE000E280))
