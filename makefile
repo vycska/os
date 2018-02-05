@@ -39,8 +39,8 @@ $(TARGET).elf : $(AOBJS) $(COBJS)
 	$(info Linking $(TARGET))
 	arm-none-eabi-gcc $^ $(LDFLAGS) $(LDLIBS) -o $@
 	arm-none-eabi-objdump -d -S -z -w $@ > $(TARGET).lst
+	arm-none-eabi-objcopy -O ihex $@ $(TARGET).hex
 	arm-none-eabi-objcopy -O binary $@ $(TARGET).bin
-	arm-none-eabi-objcopy -I ihex $@ $(TARGET).hex
 	arm-none-eabi-size --format=sysv --common -d $(TARGET).elf
 
 objs/%.o : %.s
