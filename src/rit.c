@@ -4,7 +4,7 @@
 #include "os.h"
 #include "LPC1769.h"
 
-extern volatile unsigned short adc[8];
+extern volatile unsigned int adc0,adc2;
 extern volatile long long int millis;
 extern struct tcb *RunPt;
 extern struct BoardLed_Config boardled_config;
@@ -42,9 +42,9 @@ void RIT_IRQHandler(void) {     // process sleeping threads
    else if(boardled_config.counter >= boardled_config.period) {
       boardled_config.counter = 0;
       boardled_config.active_color = (boardled_config.active_color + 1) % 8;
-      if(adc[0] > 500) Board_LED(boardled_config.active_color);
+      if(adc0 > 500) Board_LED(boardled_config.active_color);
    }
 
-   AD0CR |= (1<<16); //start burst
+   //AD0CR |= (1<<16); //start burst
    RICTRL |= (1 << 0);          //clear interrupt flag
 }

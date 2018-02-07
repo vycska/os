@@ -94,10 +94,18 @@
 #define T1MR1                          (*((volatile uint32_t*)0x4000801C))
 #define T2MR1                          (*((volatile uint32_t*)0x4009001C))
 #define T3MR1                          (*((volatile uint32_t*)0x4009401C))
+#define T0MR3                          (*((volatile uint32_t*)0x40004024))
+#define T1MR3                          (*((volatile uint32_t*)0x40008024))
+#define T2MR3                          (*((volatile uint32_t*)0x40090024))
+#define T3MR3                          (*((volatile uint32_t*)0x40094024))
 #define T0CTCR                         (*((volatile uint32_t*)0x40004070))
 #define T1CTCR                         (*((volatile uint32_t*)0x40008070))
 #define T2CTCR                         (*((volatile uint32_t*)0x40090070))
 #define T3CTCR                         (*((volatile uint32_t*)0x40094070))
+#define T0EMR                          (*((volatile uint32_t*)0x4000403C))
+#define T1EMR                          (*((volatile uint32_t*)0x4000803C))
+#define T2EMR                          (*((volatile uint32_t*)0x4009003C))
+#define T3EMR                          (*((volatile uint32_t*)0x4009403C))
 
 #define FIO0DIR                        (*((volatile uint32_t*)0x2009C000))
 #define FIO1DIR                        (*((volatile uint32_t*)0x2009C020))
@@ -253,7 +261,7 @@
 #define DMACSoftLSReq                  (*((volatile uint32_t*)0x5000402C))
 #define DMACConfig                     (*((volatile uint32_t*)0x50004030))
 #define DMACSync                       (*((volatile uint32_t*)0x50004034))
-#define DMAREQSEL                      (*((volatile uint32_t*)0x400FC1C4))
+#define DMAReqSel                      (*((volatile uint32_t*)0x400FC1C4))
 
 #define DMACC0SrcAddr                  (*((volatile uint32_t*)0x50004100)) //DMA Channel 0 Source Address Register
 #define DMACC0DestAddr                 (*((volatile uint32_t*)0x50004104)) //DMA Channel 0 Destination Address Register

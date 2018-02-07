@@ -8,7 +8,7 @@ extern volatile long long int millis;
 //extern volatile struct sDustSensor dust_sensor[300];
 extern volatile struct Task_DSM501_Data task_dsm501_data;
 
-volatile unsigned short adc[8];
+volatile unsigned int adc0,adc2;
 
 void ADC_Init(void) {
    PCONP |= (1 << 12);                                  //power
@@ -19,7 +19,7 @@ void ADC_Init(void) {
    PINSEL1 = (PINSEL1 & (~(0x3 << 18))) | (1 << 18);    //P0.25 is AD0.2
    PINMODE1 = (PINMODE1 & (~(0x3 << 18))) | (2 << 18);  //neither pull-up, nor pull-down
 
-   AD0CR = (1<<0) | (1<<2) | ((CLOCK/13)<<8) | (0<<16) | (0<<21) | (0<<24); //select AD0, select AD2, currently no burst, currently ADC powered down, no start
+   AD0CR = (1<<0) | (1<<2) | ((CLOCK/13)<<8) | (0<<16) | (0<<21) | (5<<24) | (0<<27); //select AD0, select AD2, no burst, ADC powered down, start conversion on edge of MAT0.3, edge is rising
 
    AD0INTEN = (1<<2);           //conversion on channel 2 [the last] will generate an interrupt
    IPR5 = (IPR5&(~(0x1f<<19))) | (2<<19);
@@ -31,15 +31,15 @@ void ADC_Init(void) {
 
 void ADC_IRQHandler(void) {
    int B,b,v;
-   AD0CR &= (~(1<<16)); //clear burst
+   //AD0CR &= (~(1<<16)); //clear burst
 
-   adc[0] = (AD0DR0>>4)&0xfff;
-   adc[2] = (AD0DR2>>4)&0xfff;
+   adc0 = (AD0DR0>>4)&0xfff;
+   adc2 = (AD0DR2>>4)&0xfff;
 
    /*
    if(millis>60000 && dust_sensor_index<300) {
       dust_sensor[dust_sensor_index].millis = millis;
-      dust_sensor[dust_sensor_index].value = adc[2];
+      dust_sensor[dust_sensor_index].value = adc2;
       dust_sensor_index+=1;
    }
    */
@@ -47,7 +47,7 @@ void ADC_IRQHandler(void) {
    B = task_dsm501_data.i/8;
    b = task_dsm501_data.i%8;
    v = (task_dsm501_data.d[B] & (1<<b)) != 0;
-   if(adc[2]<1000) {
+   if(adc2<1000) {
       if(v) {
          task_dsm501_data.lowsum += 1;
          task_dsm501_data.d[B] &= (~(1<<b));

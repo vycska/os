@@ -1,6 +1,7 @@
 #include "main.h"
 #include "active_buzzer.h"
 #include "adc.h"
+#include "dma.h"
 #include "fifos.h"
 #include "fs.h"
 #include "i2c.h"
@@ -49,12 +50,15 @@ int main(void) {
    I2C0_Init();
    I2C1_Init();
 
+   Timer0_Init();
    Timer1_Init();
    Timer2_Init();
    Timer3_Init();
 
    ADC_Init();
    RTC_Init();
+
+   //DMA_Init();
 
    Active_Buzzer_Init();
    Passive_Buzzer_Init();
