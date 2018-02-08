@@ -155,7 +155,7 @@
 #define AD0DR4                         (*((volatile uint32_t*)0x40034020))
 #define AD0DR5                         (*((volatile uint32_t*)0x40034024))
 #define AD0DR6                         (*((volatile uint32_t*)0x40034028))
-#define AD0DR7                         (*((volatile uint32_t*)0x4003403C))
+#define AD0DR7                         (*((volatile uint32_t*)0x4003402C))
 #define AD0STAT                        (*((volatile uint32_t*)0x40034030))
 
 #define ISER0                          (*((volatile uint32_t*)0xE000E100))
