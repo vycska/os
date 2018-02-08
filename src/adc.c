@@ -8,7 +8,7 @@ extern volatile long long int millis;
 //extern volatile struct sDustSensor dust_sensor[300];
 extern volatile struct Task_DSM501_Data task_dsm501_data;
 
-volatile unsigned int adc0,adc2;
+volatile unsigned int adc[8];
 
 void ADC_Init(void) {
    PCONP |= (1 << 12);                                  //power
@@ -33,13 +33,13 @@ void ADC_IRQHandler(void) {
    int B,b,v;
    //AD0CR &= (~(1<<16)); //clear burst
 
-   adc0 = (AD0DR0>>4)&0xfff;
-   adc2 = (AD0DR2>>4)&0xfff;
+   adc[0] = (AD0DR0>>4)&0xfff;
+   adc[2] = (AD0DR2>>4)&0xfff;
 
    /*
    if(millis>60000 && dust_sensor_index<300) {
       dust_sensor[dust_sensor_index].millis = millis;
-      dust_sensor[dust_sensor_index].value = adc2;
+      dust_sensor[dust_sensor_index].value = adc[2];
       dust_sensor_index+=1;
    }
    */
@@ -47,7 +47,7 @@ void ADC_IRQHandler(void) {
    B = task_dsm501_data.i/8;
    b = task_dsm501_data.i%8;
    v = (task_dsm501_data.d[B] & (1<<b)) != 0;
-   if(adc2<1000) {
+   if(adc[2]<1000) {
       if(v) {
          task_dsm501_data.lowsum += 1;
          task_dsm501_data.d[B] &= (~(1<<b));

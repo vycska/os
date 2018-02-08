@@ -5,7 +5,7 @@
 #include "utils.h"
 #include "LPC1769.h"
 
-extern volatile unsigned int adc0,adc2;
+extern volatile unsigned int adc[8];
 
 void Task_ADC(void) {
    char s[24];
@@ -14,9 +14,9 @@ void Task_ADC(void) {
    Fifo_Uart0_Put("Task_ADC has started", 0);
 
    while(1) {
-      value = 3.3 * adc0 / 4095.0;
+      value = 3.3 * adc[0] / 4095.0;
       Fifo_HD44780_Put("          ", 0, 10);
-      mysprintf(s, "%u %f2V", adc0, (char *)&value);
+      mysprintf(s, "%u %f2V", adc[0], (char *)&value);
       Fifo_HD44780_Put(s, 0, 10);
       OS_Sleep(2000);
    }

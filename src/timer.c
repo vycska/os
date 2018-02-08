@@ -1,4 +1,5 @@
 #include "timer.h"
+#include "dma.h"
 #include "main.h"
 #include "os.h"
 #include "passive_buzzer.h"
@@ -36,13 +37,14 @@ void Timer0_Init(void) { //naudojamas periodiskai ADC matavimui
    IPR0 = (IPR0&(~(0x1f<<11))) | (7<<11);
    ISER0 |= (1<<1); //Timer 0 interrupt enable
 
-   T0TCR = (1<<0) || (0<<1); //counters enabled, counters not reset
+   T0TCR = (1<<0) | (0<<1); //counters enabled, counters not reset
 }
 
 void TIMER0_IRQHandler(void) {
    if(T0IR&(1<<0)) { //MR0 interrupt
       T0EMR &= (~(1<<3)); //clear EM3 (MAT0.3)
       //config DMA
+      DMA_ADC_Init();
       T0IR |= (1<<0); //reset the interrupt
    }
 }
