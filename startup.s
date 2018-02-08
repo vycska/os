@@ -62,6 +62,7 @@
 
 .text
 .thumb_func
+.type Reset_Handler, %function
 Reset_Handler:
 bl init
 bl main
