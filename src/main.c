@@ -34,7 +34,7 @@ extern char _data_start_lma, _data_start, _data_end, _bss_start, _bss_end;
 int mtx_filesystem, mtx_i2c[3], mtx_timer[4];
 volatile long long int millis;
 
-int main(void) {
+void main(void) {
    int i;
 
    DisableInterrupts(); //interrupts will be enabled in OS_Start()

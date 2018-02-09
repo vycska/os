@@ -24,6 +24,9 @@ LDLIBS := -lgcc -lc_nano -lnosys -lm -lu8g2
 ifeq ($(DEBUG),1)
    CFLAGS+=-g
 endif
+ifeq ($(DEBUG),2)
+   CFLAGS+=-ggdb3
+endif
 
 vpath %.h inc:inc/u8g2
 vpath %.s src
