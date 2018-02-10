@@ -53,7 +53,7 @@ void main(void) {
    //DMA_Init();
    ADC_Init();
 
-   //Timer0_Init();
+   Timer0_Init();
    Timer1_Init();
    Timer2_Init();
    Timer3_Init();
