@@ -8,45 +8,17 @@
 
 extern struct PassiveBuzzerConfig passive_buzzer_config;
 
-/*
-Registers:
-* IR - interrupt register [clear interrupt, which interrupt source is pending]
-* TCR - timer control register [control functions]
-* TC - timer counter
-* PR - prescaler register
-* PC - prescaler counter
-* MCR - match control register [control if interrupt is generated, what happens to TC on match]
-* MR0-MR3 - match registers
-* CTCR - count control register [select between Timer or Counter mode]
-*/
-
 void Timer0_Init(void) { //naudojamas periodiskai ADC matavimui
    PCONP |= (1<<1);
    PCLKSEL0 = (PCLKSEL0 & (~(3<<2))) | (1<<2); //PCLK=CCLK
-
-   T0IR |= (0x3f<<0); //reset all interrupts
    T0TCR = (0<<0) | (1<<1); //counters disabled, counters reset
-   T0CTCR &= (~(3<<0)); //timer mode
+   T0CTCR = (0<<0); //timer mode
    T0PR = 0;
-   T0MR0 = 500*CLOCK-1; //0.5ms
-   T0MR3 = 1000*CLOCK-1; //1ms
-   T0MCR = (1<<0) | (1<<10); //interrupt on MR0, reset on MR3
-   T0EMR = (T0EMR&(~(0xfff<<0))) | (2<<10); //set EM3 (MAT0.3) to high on MR3
-   
-   //interrupt id 1, exception number 17, vector offset 0x44, Timer 0, Match 0-1, Capture 0-1
-   IPR0 = (IPR0&(~(0x1f<<11))) | (7<<11);
-   ISER0 |= (1<<1); //Timer 0 interrupt enable
-
+   T0MR0 = T0MR1 = T0MR2 = 0;
+   T0MR3 = 250*CLOCK-1; //0.25ms [lems kad kazkuris ADC[x] bus matuojamas su 1ms periodu]
+   T0MCR = (1<<10); //reset on MR3
+   T0EMR = (3<<10); //toggle EM3 (MAT0.3) on MR3
    T0TCR = (1<<0) | (0<<1); //counters enabled, counters not reset
-}
-
-void TIMER0_IRQHandler(void) {
-   if(T0IR&(1<<0)) { //MR0 interrupt
-      T0EMR &= (~(1<<3)); //clear EM3 (MAT0.3)
-      //config DMA
-      DMA_ADC_Init();
-      T0IR |= (1<<0); //reset the interrupt
-   }
 }
 
 void Timer1_Init(void) {        //naudojamas su switchu
@@ -65,7 +37,6 @@ void Timer1_Start(void) {
 
 unsigned int Timer1_Stop(void) {        //grazina ms x10
    unsigned int tc = T1TC;
-
    T1TCR = 0x02;                //TC and PC counters disabled and reset
    return tc;
 }

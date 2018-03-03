@@ -40,8 +40,6 @@ void main(void) {
    DisableInterrupts(); //interrupts will be enabled in OS_Start()
    PCONP = 0;                   //gate off clock for peripherals
    PLL0_Init();
-   PCLKSEL0 = 0;                //select clock for peripherals to be CCLK/4
-   PCLKSEL1 = 0;
 
    FLASHCFG = (FLASHCFG & (~(0xf << 12))) | (5 << 12);  //flash accesses use 6 cpu clocks ["safe" setting]
 

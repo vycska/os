@@ -5,8 +5,8 @@
 #include "utils.h"
 #include "LPC1769.h"
 
-//int dust_sensor_index;
-//volatile struct sDustSensor dust_sensor[300];
+int dust_sensor_index;
+volatile struct sDustSensor dust_sensor[300];
 
 volatile struct Task_DSM501_Data task_dsm501_data = {{0},0,30000};
 

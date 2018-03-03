@@ -4,8 +4,8 @@
 #include "LPC1769.h"
 
 extern volatile long long int millis;
-//extern int dust_sensor_index;
-//extern volatile struct sDustSensor dust_sensor[300];
+extern int dust_sensor_index;
+extern volatile struct sDustSensor dust_sensor[300];
 extern volatile struct Task_DSM501_Data task_dsm501_data;
 
 volatile unsigned int adc[8];
@@ -22,7 +22,7 @@ void ADC_Init(void) {
    AD0CR = (1<<0) | (1<<2) | ((CLOCK/13)<<8) | (0<<16) | (0<<21) | (5<<24) | (0<<27); //select AD0, select AD2, no burst, ADC powered down, start conversion on edge of MAT0.3, edge is rising
 
    AD0INTEN = (1<<2);           //conversion on channel 2 [the last] will generate an interrupt
-   IPR5 = (IPR5&(~(0x1f<<19))) | (2<<19);
+   IPR5 = (IPR5&(~(0x1f<<19))) | (1<<19);
    ISER0 |= (1<<22);            //ADC interrupt enable
 
    AD0CR |= (1 << 21);          //converter is operational [but not started]
@@ -31,18 +31,15 @@ void ADC_Init(void) {
 
 void ADC_IRQHandler(void) {
    int B,b,v;
-   //AD0CR &= (~(1<<16)); //clear burst
 
    adc[0] = (AD0DR0>>4)&0xfff;
    adc[2] = (AD0DR2>>4)&0xfff;
 
-   /*
-   if(millis>60000 && dust_sensor_index<300) {
+   if(millis>6000 && dust_sensor_index<300) {
       dust_sensor[dust_sensor_index].millis = millis;
       dust_sensor[dust_sensor_index].value = adc[2];
       dust_sensor_index+=1;
    }
-   */
 
    B = task_dsm501_data.i/8;
    b = task_dsm501_data.i%8;
@@ -62,6 +59,4 @@ void ADC_IRQHandler(void) {
    task_dsm501_data.i += 1;
    if(task_dsm501_data.i==MT)
       task_dsm501_data.i = 0;
-
-   ICPR0 |= (1<<22); //clear pending interrupt [?]
 }

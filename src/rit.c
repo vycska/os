@@ -26,6 +26,8 @@ void RIT_Init(void) {           //1ms
 void RIT_IRQHandler(void) {     // process sleeping threads
    struct tcb *cursor;
 
+   RICTRL |= (1 << 0);          //clear interrupt flag
+
    //increment milliseconds timer
    millis += 1;
 
@@ -44,7 +46,4 @@ void RIT_IRQHandler(void) {     // process sleeping threads
       boardled_config.active_color = (boardled_config.active_color + 1) % 8;
       if(adc[0] > 500) Board_LED(boardled_config.active_color);
    }
-
-   //AD0CR |= (1<<16); //start burst
-   RICTRL |= (1 << 0);          //clear interrupt flag
 }

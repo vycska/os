@@ -317,6 +317,10 @@ void Task_Command_Parser(void) {
             OS_Blocking_Wait(&smphrFinished);
             break;
          }
+         case 0x9420: { //gpreg_clear
+            GPREG0 = GPREG1 = GPREG2 = GPREG3 = GPREG4 = 0;
+            break;
+         }
          case 0x6425:{         //gpreg_set
             GPREG0 = params[2];
             GPREG1 = params[3];
@@ -368,12 +372,8 @@ void Task_Command_Parser(void) {
             break;
          }
          case 0xbf26: {         //temp
-            mysprintf(buf, "sizeof(struct Log_Record): %d", (int)sizeof(struct Log_Record));
-            Fifo_Uart0_Put(buf, &smphrFinished);
-            OS_Blocking_Wait(&smphrFinished);
             break;
          }
-         /*
          case 0xf74a: { //adc
             for(i=0;i<300;i++) {
                mysprintf(buf,"%d : %l %u\n",i,(char*)&dust_sensor[i].millis,dust_sensor[i].value);
@@ -382,7 +382,6 @@ void Task_Command_Parser(void) {
             }
             break;
          }
-         */
          default:{
             Fifo_Uart0_Put("Unknown command", 0);
          }
