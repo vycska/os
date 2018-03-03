@@ -6,6 +6,8 @@ MEMORY
 {
 	rom(rx)	: ORIGIN = 0x00000000, LENGTH = 512K
 	ram(rw)	: ORIGIN = 0x10000000, LENGTH = 32K
+        ahb_ram1(rw) : ORIGIN = 0x2007c000, LENGTH = 16K
+        ahb_ram2(rw) : ORIGIN = 0x20080000, LENGTH = 16K
 }
 
 SECTIONS
