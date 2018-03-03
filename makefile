@@ -59,7 +59,7 @@ deps/%.d : ;
 
 ################################################################################
 
-.PHONY : all libs clean install tags print-%
+.PHONY : all libs clean install picocom tags print-%
 
 all : $(TARGET).elf
 
@@ -73,6 +73,9 @@ clean :
 
 install : all
 	lpc21isp $(TARGET).hex /dev/ttyUSB0 115200 4000
+
+picocom :
+	picocom -b 115200 --echo /dev/ttyUSB0
 
 tags :
 	ctags -R --extra=+f *
