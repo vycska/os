@@ -1,4 +1,4 @@
-# make all libs clean install tags print-<variable>
+# make all libs clean cleanall install picocom tags print-<variable>
 
 ################################################################################
 
@@ -59,7 +59,7 @@ deps/%.d : ;
 
 ################################################################################
 
-.PHONY : all libs clean install picocom tags print-%
+.PHONY : all libs clean cleanall install picocom tags print-%
 
 all : $(TARGET).elf
 
@@ -70,6 +70,9 @@ libs/libu8g2.a : $(U8G2OBJS)
 
 clean :
 	rm -rf *.o *.elf *.bin *.hex *.map *.lst cscope* tags deps objs
+
+cleanall : clean
+	rm -rf libs
 
 install : all
 	lpc21isp $(TARGET).hex /dev/ttyUSB0 115200 4000
